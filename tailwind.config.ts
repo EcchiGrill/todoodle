@@ -21,6 +21,8 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        todo: "#faf6f1",
+        progressBar: "#92571e",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -30,7 +32,7 @@ const config: Config = {
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#ffff",
+          DEFAULT: "#f1e4d5",
           foreground: "hsl(var(--secondary-foreground))",
         },
         muted: {

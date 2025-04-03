@@ -1,6 +1,7 @@
 {
   "name": "todoodle",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "author": "EcchiGrill",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -30,6 +31,7 @@
     "eslint-config-next": "15.2.4",
     "postcss": "^8.4.35",
     "react-icons": "^5.5.0",
+    "react-toastify": "^11.0.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

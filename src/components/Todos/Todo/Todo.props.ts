@@ -1,3 +1,3 @@
-import { ITodo } from "./../../api/todos";
+import { ITodo } from "@/api/todos";
 
 export interface ITodoProps extends Omit<ITodo, "userId"> {}

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,33 +6,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaPencilAlt } from "react-icons/fa";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationLink,
-} from "@/components/ui/pagination";
-import { getCompletedTodos, getTodos, getTodosByPage } from "@/api/todos";
-import { PAGES_COUNT, TODOS_COUNT_ON_PAGE } from "@/constants";
-import Todo from "@/components/Todo";
+import { getCompletedTodos, getTodos } from "@/api/todos";
+import Todos from "@/components/Todos";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TODOS_PER_PAGE } from "@/constants";
+import CreateTodo from "@/components/CreateTodo";
+import PaginationWrapper from "@/components/PaginationWrapper";
+import { PageProps } from "@/../.next/types/app/layout";
 
-export default async function App({
-  params,
-}: {
-  params: { pageNumber: Promise<string> };
-}) {
-  const pageNumber = (await params).pageNumber;
+export async function generateStaticParams() {
+  const todos = await getTodos();
+  return Array.from({
+    length: Math.ceil(todos.length / TODOS_PER_PAGE),
+  }).map((_, i) => {
+    return { pageNumber: String(i + 1) };
+  });
+}
+
+export default async function App({ params }: PageProps) {
+  const pageNumber = Number((await params).pageNumber);
   const todos = await getTodos();
   const completedTodos = await getCompletedTodos();
-  const pageTodos = await getTodosByPage(Number(pageNumber));
-  const pagesCount = Math.ceil(todos.length / TODOS_COUNT_ON_PAGE);
+  const progressPercentage = (completedTodos.length / todos.length) * 100 || 0;
+  const pagesCount = Math.ceil(todos.length / TODOS_PER_PAGE);
 
   return (
     <main className="h-screen flex place-content-center">
-      <Card className="mt-10 w-[40rem] h-fit">
+      <div
+        className={`fixed top-0 left-0 h-1.5 bg-progressBar transition-all duration-500`}
+        style={{ width: `${progressPercentage}%` }}
+      />
+      <Card className="mt-10 max-sm:w-[30rem] w-[40rem] h-fit mx-2">
         <CardHeader>
           <CardTitle>
             <div className="flex items-center gap-3">
@@ -50,52 +55,32 @@ export default async function App({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2">
-            <Input placeholder="Add new task..." />
-            <Button className="text-lg">
-              Add <IoMdAddCircleOutline />
-            </Button>
-          </div>
+          <CreateTodo />
 
-          <div className="mt-8 flex flex-col gap-2">
-            {pageTodos.map((todo) => (
-              <Todo
-                key={todo.id}
-                id={todo.id}
-                completed={todo.completed}
-                title={todo.title}
-              />
-            ))}
-          </div>
+          <Suspense
+            fallback={
+              <div className="space-y-3 mt-4">
+                <Skeleton className="h-[60px] w-full rounded-lg" />
+                <Skeleton className="h-[60px] w-full rounded-lg" />
+                <Skeleton className="h-[60px] w-full rounded-lg" />
+              </div>
+            }
+          >
+            <Todos pageNumber={pageNumber} />
+          </Suspense>
 
-          <Pagination className="mt-5">
-            <PaginationContent>
-              {Array.from(
-                { length: pagesCount < PAGES_COUNT ? pagesCount : PAGES_COUNT },
-                (_, i) => i + 1
-              ).map((i) => (
-                <PaginationLink
-                  key={i}
-                  href={`/page/${i}`}
-                  isActive={i === Number(pageNumber)}
-                >
-                  {i}
-                </PaginationLink>
-              ))}
-            </PaginationContent>
-            <PaginationContent>
-              <PaginationEllipsis />
-            </PaginationContent>
-          </Pagination>
+          <PaginationWrapper totalPages={pagesCount} currentPage={pageNumber} />
         </CardContent>
 
         <CardFooter className="border-t border-primary w-full flex justify-between place-items-center py-5 font-thin">
-          <span>
-            {completedTodos.length} of {todos.length} tasks completed
-          </span>
-          <span>
-            {((completedTodos.length / todos.length) * 100).toFixed(0)}% done
-          </span>
+          {!todos.length ? (
+            "No tasks yet. Add one to get started!"
+          ) : (
+            <span>
+              {completedTodos.length} of {todos.length} tasks completed
+            </span>
+          )}
+          <span>{progressPercentage}% done</span>
         </CardFooter>
       </Card>
     </main>

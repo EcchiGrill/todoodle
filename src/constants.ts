@@ -1,2 +1,3 @@
-export const PAGES_COUNT = 10;
-export const TODOS_COUNT_ON_PAGE = 10;
+export const MAX_PAGINATION = 10;
+export const MAX_MOBILE_PAGINATION = 7;
+export const TODOS_PER_PAGE = 10;

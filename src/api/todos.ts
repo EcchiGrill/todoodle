@@ -11,6 +11,8 @@ type TodosResponse = ITodo[];
 
 type CreateTodoResponse = Omit<ITodo, "userId">;
 
+type CreateTodoBody = Omit<ITodo, "userId" | "id">;
+
 export const getTodos = async (): Promise<TodosResponse> =>
   fetchApi({
     endpoint: "/todos",
@@ -31,14 +33,27 @@ export const getTodosByPage = async (
     method: "GET",
   });
 
-export const createTodo = async (): Promise<CreateTodoResponse> =>
+export const createTodo = async (
+  body: CreateTodoBody
+): Promise<CreateTodoResponse> =>
   fetchApi({
     endpoint: "/todos",
     method: "POST",
+    body,
   });
 
-export const removeTodo = async () =>
+export const editTodo = async (
+  id: number,
+  body: CreateTodoBody
+): Promise<CreateTodoResponse> =>
   fetchApi({
-    endpoint: "/todos",
+    endpoint: `/todos/${id}`,
+    method: "PUT",
+    body,
+  });
+
+export const deleteTodo = async (id: number) =>
+  fetchApi({
+    endpoint: `/todos/${id}`,
     method: "DELETE",
   });
