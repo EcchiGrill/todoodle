@@ -16,20 +16,13 @@ import CreateTodo from "@/components/CreateTodo";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import { PageProps } from "@/../.next/types/app/layout";
 
-export async function generateStaticParams() {
-  const todos = await getTodos();
-  return Array.from({
-    length: Math.ceil(todos.length / TODOS_PER_PAGE),
-  }).map((_, i) => {
-    return { pageNumber: String(i + 1) };
-  });
-}
-
 export default async function App({ params }: PageProps) {
   const pageNumber = Number((await params).pageNumber);
   const todos = await getTodos();
   const completedTodos = await getCompletedTodos();
-  const progressPercentage = (completedTodos.length / todos.length) * 100 || 0;
+  const progressPercentage = Math.floor(
+    (completedTodos.length / todos.length) * 100 || 0
+  );
   const pagesCount = Math.ceil(todos.length / TODOS_PER_PAGE);
 
   return (
@@ -56,7 +49,6 @@ export default async function App({ params }: PageProps) {
         </CardHeader>
         <CardContent>
           <CreateTodo />
-
           <Suspense
             fallback={
               <div className="space-y-3 mt-4">
@@ -68,7 +60,6 @@ export default async function App({ params }: PageProps) {
           >
             <Todos pageNumber={pageNumber} />
           </Suspense>
-
           <PaginationWrapper totalPages={pagesCount} currentPage={pageNumber} />
         </CardContent>
 

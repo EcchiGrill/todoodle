@@ -14,11 +14,16 @@ const CreateTodo = () => {
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
+    if (!title) return toast.error("Please enter a title for the todo!");
+    if (title.length > 200)
+      return toast.error("Your TODO title should be less than 200 symbols!");
+
     try {
-      createTodo({ title, completed: false }); // Here should be real API call to create the todo
+      createTodo({ title, completed: false });
     } catch (error) {
       console.error(error);
     }
+
     toast.success("Todo created successfully");
     setTitle("");
     router.refresh();

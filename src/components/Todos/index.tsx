@@ -7,6 +7,11 @@ const Todos = async ({ pageNumber }: ITodosProps) => {
 
   return (
     <div className="mt-8 flex flex-col gap-2">
+      {!todos.length && (
+        <div className="text-center text-xl font-semibold text-red-500">
+          No todos found!
+        </div>
+      )}
       {todos.map((todo) => (
         <Todo
           key={todo.id}
