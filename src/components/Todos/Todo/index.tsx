@@ -24,12 +24,12 @@ const Todo = ({ title, id, completed }: ITodoProps) => {
       await editTodo(id, {
         title,
         completed: !completed,
-      }); //Here should be real API call to edit the todo
+      });
     } catch (error) {
       console.error(error);
     }
-
     router.refresh();
+    if (!completed) toast.success("Well done!");
   };
 
   const editTodoHandler = async () => {
@@ -37,7 +37,7 @@ const Todo = ({ title, id, completed }: ITodoProps) => {
       await editTodo(id, {
         title: titleText,
         completed,
-      }); //Here should be real API call to edit the todo
+      });
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +54,7 @@ const Todo = ({ title, id, completed }: ITodoProps) => {
 
   const removeTodoHandler = async () => {
     try {
-      await deleteTodo(id); //Here should be real API call to delete the todo
+      await deleteTodo(id);
     } catch (error) {
       console.error(error);
     }
