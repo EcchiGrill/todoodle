@@ -1,24 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { login } from "./api/auth"; // must be edge-safe (no fs, no Prisma, etc.)
+import { login } from "./api/auth";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  const token = request.cookies.get("access_token");
 
-  if (!token) {
-    try {
-      const { access_token } = await login();
+  try {
+    const { access_token } = await login();
 
-      response.cookies.set("access_token", access_token, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "lax",
-      });
-    } catch (error) {
-      console.error(error);
-      response.cookies.set("access_token", "");
-    }
+    response.cookies.set("access_token", access_token, {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+    });
+  } catch (error) {
+    console.error(error);
+    response.cookies.set("access_token", "");
   }
 
   if (request.nextUrl.pathname === "/") {

@@ -3,14 +3,14 @@
 ### Keep track of your tasks in style! 🚀
 
 <p align="center">
-  <a href="https://todoodle.vercel.app" target="_blank"><img src="./public/preview.png" alt="Preview" /></a>
+  <a href="https://todoodle-planner.vercel.app" target="_blank"><img src="./public/preview.png" alt="Preview" /></a>
 </p>
 
 ---
 
 ## 📌 About Todoodle
 
-Todoodle is a sleek, intuitive, and highly efficient task planner designed to make organizing your life effortless and fun! Whether you're managing daily to-dos, tracking project progress, or setting reminders, Todoodle has got you covered.
+Todoodle is a sleek, intuitive, and highly efficient task planner designed to make organizing your life effortless and fun! Whether you're managing daily to-dos, tracking project progress, or setting reminders, Todoodle has got you covered. The application is powered by its own custom-built API, ensuring seamless and reliable task management functionality.
 
 ### ✨ Features
 
@@ -57,7 +57,7 @@ The app will be available at `http://localhost:3000`.
 
 - 🔵 **TailwindCSS**
 - 🟢 **Next.js**
-- 🔴 **[JSON Placeholder](https://jsonplaceholder.typicode.com/)** - for fake API requests
+- 🔴 **[Todoodle API](https://github.com/EcchiGrill/todoodle-api)**
 
 ---
 
